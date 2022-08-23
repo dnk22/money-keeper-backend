@@ -1,8 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ClassSerializerInterceptor,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
+import { JWTAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@UseGuards(JWTAuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -18,9 +33,14 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  findOneById(@Param('id') id: string) {
+    return this.userService.findOneById(+id);
   }
+
+  // @Get(':id')
+  // findOneByQuery(@Param('id') id: string) {
+  //   return this.userService.findOneById(+id);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { environment } from '../environments/environment';
-import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 @Module({
-  imports: [MongooseModule.forRoot(environment.db_uri), UserModule],
+  imports: [UserModule, AuthModule, MongooseModule.forRoot(environment.db_uri)],
   controllers: [],
   providers: [],
 })
-
 export class AppModule {}
