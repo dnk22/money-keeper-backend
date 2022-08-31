@@ -17,10 +17,10 @@ import { environment } from '../../environments/environment';
       secret: environment.secretKey,
       signOptions: {
         expiresIn: '1d',
-        algorithm: 'HS384',
+        algorithm: 'HS256',
       },
       verifyOptions: {
-        algorithms: ['HS384'],
+        algorithms: ['HS256'],
       },
     }),
   ],

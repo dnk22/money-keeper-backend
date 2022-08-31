@@ -43,8 +43,8 @@ export class AuthService {
     return {
       msg: 'User successfully login',
       success: true,
-      email : user.email,
-      id : user._id
+      email: user.email,
+      id: user._id,
     };
   }
 

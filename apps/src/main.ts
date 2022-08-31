@@ -3,11 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import cookieParser = require('cookie-parser');
 import passport = require('passport');
+import * as session from 'express-session';
+import { useContainer } from 'class-validator';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import * as session from 'express-session';
-import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -41,12 +41,18 @@ async function bootstrap() {
   app.use(cookieParser(environment.secretKey));
   app.setGlobalPrefix(environment.globalPrefix);
   app.enableCors({
-    origin: true,
-    // origin: ['http://localhost:4200'],
+    origin: ['http://localhost:4200'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
-    // exposedHeaders: ['Authorization'],
+    exposedHeaders: ['Authorization'],
   });
+  // app.use(csurf({ cookie: { sameSite: 'strict', signed : true } }));
+  // app.use((req: any, res: any, next: any) => {
+  //   const token = req.csrfToken();
+  //   res.cookie('XSRF-TOKEN', token);
+  //   res.locals.csrfToken = token;
+  //   next();
+  // });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 

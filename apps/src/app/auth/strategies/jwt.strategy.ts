@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { User } from '../../user/user.schema';
 
 import { AuthService } from '../auth.service';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
@@ -14,13 +13,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) : any => {
-          console.log(request.headers['x-csrf-token']);
-          let data = request.headers['x-csrf-token'];
-          if (!data) {
-            return null;
-          }
-          return data;
+        (request: Request): any => {
+          let cookieSigned = request.signedCookies['ss'];
+          return cookieSigned;
         },
       ]),
       secretOrKey: environment.secretKey,
@@ -29,8 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
-    console.log(ExtractJwt.fromHeader('X-CSRF-TOKEN'));
+  async validate(payload: JwtPayload) {
     return this.authService.verifyPayload(payload);
   }
 }
