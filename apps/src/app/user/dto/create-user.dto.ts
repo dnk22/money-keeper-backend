@@ -1,4 +1,5 @@
 export class CreateUserDto {
+  readonly _id?: string;
   readonly name: string;
   readonly dateOfBirth?: Date;
   readonly address?: string;

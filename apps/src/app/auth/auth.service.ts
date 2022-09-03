@@ -19,10 +19,12 @@ export class AuthService {
       password: await this.hashPassword(signUp.password),
     };
     const user = await this.userService.create(data);
+    const token = this.signToken(user);
     return {
       msg: 'User successfully registered',
       success: true,
       email: user.email,
+      token,
     };
   }
 
@@ -35,16 +37,17 @@ export class AuthService {
         `There isn't any user with email: ${email}`
       );
     }
-    // if (!(await this.checkPassword(password, user.password))) {
-    //   throw new UnauthorizedException(
-    //     `Wrong password for user with email: ${email}`
-    //   );
-    // }
+    if (!(await this.checkPassword(password, user.password))) {
+      throw new UnauthorizedException(
+        `Wrong password for user with email: ${email}`
+      );
+    }
+    const token = this.signToken(user);
     return {
       msg: 'User successfully login',
       success: true,
       email: user.email,
-      id: user._id,
+      token,
     };
   }
 
@@ -72,7 +75,7 @@ export class AuthService {
     if (!/^\$2[abxy]?\$\d+\$/.test(password)) {
       password = await bcrypt.hash(password, salt);
     }
-    return salt;
+    return password;
   }
 
   async checkPassword(

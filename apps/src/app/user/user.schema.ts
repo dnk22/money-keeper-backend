@@ -7,7 +7,7 @@ export type UserDocument = User & Document;
 @Schema()
 export class User {
   @Prop()
-  _id: string;
+  _id?: string;
 
   @Prop({ isRequired: true })
   name: string;
@@ -15,7 +15,7 @@ export class User {
   @Prop({ isRequired: true })
   email: string;
 
-  @Prop({ select: false })
+  @Prop()
   password: string;
 
   @Prop()
@@ -41,21 +41,6 @@ export class User {
 
   @Prop()
   updatedDate: Date;
-
-  constructor(data: Partial<User> = {}) {
-    Object.assign(this, data);
-  }
-
-  async checkPassword(plainPassword: string): Promise<boolean> {
-    return await bcrypt.compare(plainPassword, this.password);
-  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.methods.comparePassword = function (candidatePassword, cb) {
-  bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
-    if (err) return cb(err);
-    cb(null, isMatch);
-  });
-};

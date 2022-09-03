@@ -11,13 +11,13 @@ import { Request } from 'express';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly authService: AuthService) {
     super({
-      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request): any => {
-          let cookieSigned = request.signedCookies['ss'];
-          return cookieSigned;
-        },
-      ]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // jwtFromRequest: ExtractJwt.fromExtractors([
+      //   (request: Request): any => {
+      //     let cookieSigned = request.signedCookies['ss'];
+      //     return cookieSigned;
+      //   },
+      // ]),
       secretOrKey: environment.secretKey,
       ignoreExpiration: false,
       passReqToCallback: false,

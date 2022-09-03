@@ -22,7 +22,7 @@ export class AuthController {
   
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  @UseInterceptors(TokenInterceptor)
+  // @UseInterceptors(TokenInterceptor)
   register(@Body() signUpData: SignUp): Promise<User> {
     return this.authService.register(signUpData);
   }
@@ -30,7 +30,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @UseInterceptors(TokenInterceptor)
+  // @UseInterceptors(TokenInterceptor)
   async login(@AuthUser() user: User): Promise<User> {
     return user;
   }
