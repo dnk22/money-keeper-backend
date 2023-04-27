@@ -2,12 +2,11 @@ import {
   IsDefined,
   IsNotEmpty,
   IsEmail,
-  MinLength,
   Validate,
 } from 'class-validator';
 import { IsUserAlreadyExist } from '../../user/validators/is-user-already-exist.validator';
 
-export class SignUp {
+export class SignUpDto {
   @IsDefined()
   @IsNotEmpty()
   readonly name: string;

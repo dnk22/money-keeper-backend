@@ -3,7 +3,7 @@ import { User } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
-import { SignUp } from './dto/signup.dto';
+import { SignUpDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -13,10 +13,10 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async register(signUp: SignUp): Promise<any> {
+  async register(SignUpDto: SignUpDto): Promise<any> {
     const data = {
-      ...signUp,
-      password: await this.hashPassword(signUp.password),
+      ...SignUpDto,
+      password: await this.hashPassword(SignUpDto.password),
     };
     const user = await this.userService.create(data);
     const token = this.signToken(user);

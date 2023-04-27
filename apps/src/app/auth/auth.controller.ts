@@ -14,7 +14,7 @@ import { AuthUser } from '../user/user.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { User } from '../user/user.schema';
-import { SignUp } from './dto/signup.dto';
+import { SignUpDto } from './dto/signup.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,8 +23,8 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   // @UseInterceptors(TokenInterceptor)
-  register(@Body() signUpData: SignUp): Promise<User> {
-    return this.authService.register(signUpData);
+  async register(@Body() SignUpDto: SignUpDto): Promise<User> {
+    return this.authService.register(SignUpDto);
   }
 
   @Post('login')
